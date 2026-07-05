@@ -32,7 +32,7 @@ GEMINI_API_KEY     = os.environ.get("GEMINI_API_KEY", "")
 # ─────────────────────────────────────────────────────────────────────
 
 GEMINI_MODEL = "gemini-2.0-flash-preview-image-generation"
-GEMINI_URL   = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key=" + GEMINI_API_KEY
+GEMINI_URL   = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
 TG_API       = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}"
 TG_FILE_API  = f"https://api.telegram.org/file/bot{TELEGRAM_BOT_TOKEN}"
 MAX_TG_SIZE  = 49 * 1024 * 1024  # 49MB Telegram limit
@@ -140,7 +140,8 @@ def colorize_image(image_path):
         "generationConfig": {"responseModalities": ["image", "text"]}
     }
 
-    r = requests.post(GEMINI_URL, json=payload, timeout=120)
+    r = requests.post(GEMINI_URL, json=payload, timeout=120,
+                      headers={"x-goog-api-key": GEMINI_API_KEY})
     if r.status_code != 200:
         raise RuntimeError(f"Gemini error {r.status_code}: {r.text[:200]}")
 
