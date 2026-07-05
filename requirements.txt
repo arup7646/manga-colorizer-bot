@@ -1,0 +1,4 @@
+requests==2.32.3
+Pillow==11.0.0
+PyMuPDF==1.24.0
+img2pdf==0.5.1
