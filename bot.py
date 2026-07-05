@@ -26,13 +26,13 @@ from pathlib import Path
 from unzip_utils import extract_all, repack_images, output_filename
 
 # ── CONFIG — replace these values ────────────────────────────────────
-TELEGRAM_BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN_HERE"
-TELEGRAM_CHAT_ID   = "@autoanime464"          # output channel
-GEMINI_API_KEY     = "YOUR_GEMINI_API_KEY_HERE"
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHAT_ID   = os.environ.get("TELEGRAM_CHAT_ID", "@autoanime464")          # output channel
+GEMINI_API_KEY     = os.environ.get("GEMINI_API_KEY", "")
 # ─────────────────────────────────────────────────────────────────────
 
 GEMINI_MODEL = "gemini-2.0-flash-preview-image-generation"
-GEMINI_URL   = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
+GEMINI_URL   = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key=" + GEMINI_API_KEY
 TG_API       = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}"
 TG_FILE_API  = f"https://api.telegram.org/file/bot{TELEGRAM_BOT_TOKEN}"
 MAX_TG_SIZE  = 49 * 1024 * 1024  # 49MB Telegram limit
