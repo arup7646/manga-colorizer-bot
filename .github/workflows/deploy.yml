@@ -11,8 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install huggingface_hub
-        run: pip install huggingface_hub
+      - name: Install deps
+        run: pip install huggingface_hub requests
 
       - name: Upload to HF Space
         env:
@@ -20,4 +20,6 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python3 deploy_to_hf.py
+        run: |
+          python3 deploy_to_hf.py 2>&1
+          echo 'Exit code:' $?
