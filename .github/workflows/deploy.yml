@@ -13,19 +13,24 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Add HF Space secrets
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          # Create .env file with secrets for HF Space
+          echo "TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}" > .env
+          echo "GEMINI_API_KEY=${GEMINI_API_KEY}" >> .env
+          echo "TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}" >> .env
+
       - name: Push to Hugging Face Spaces
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-          git remote add hf https://ayankandar2:${HF_TOKEN}@huggingface.co/spaces/ayankandar2/manga-colorizer-bot || true
-          git push hf main --force
-          echo "✅ Deployed to HF Spaces!"
-
-  run-bot:
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Confirm deployment
-        run: echo "Bot deployed to https://huggingface.co/spaces/ayankandar2/manga-colorizer-bot"
+          git add .env || true
+          git commit -m "add env" --allow-empty || true
+          git push https://ayankandar2:${HF_TOKEN}@huggingface.co/spaces/ayankandar2/manga-colorizer-bot main --force
+          echo "✅ Deployed!"
