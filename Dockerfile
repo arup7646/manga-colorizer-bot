@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    unrar \
+    unrar-free \
     p7zip-full \
     && rm -rf /var/lib/apt/lists/*
 
@@ -16,4 +16,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY bot.py .
 COPY unzip_utils.py .
 
-CMD ["python", "bot.py"]
+CMD ["python", "-u", "bot.py"]
