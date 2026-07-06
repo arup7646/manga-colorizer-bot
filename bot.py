@@ -437,7 +437,18 @@ def handle_text(update):
             "\u0032\ufe0f\u20e3 Files processed one by one\n"
             "\u0033\ufe0f\u20e3 Colored results sent to channel\n\n"
             "Powered by \u2728 Gemini AI\n\n"
+            "Commands:\n"
+            "/ping \u2014 check if bot is alive\n"
+            "/status \u2014 queue status\n\n"
             "Just send your files to start!"
+        )
+    elif text == "/ping":
+        tg_send(chat_id,
+            "\U0001f7e2 <b>Bot is alive!</b>\n\n"
+            "\u2705 Polling: Active\n"
+            "\U0001f4e5 Queue: " + str(file_queue.qsize()) + " file(s)\n"
+            "\U0001f916 Gemini: Ready\n"
+            "\U0001f4e4 Output: " + TELEGRAM_CHAT_ID
         )
     elif text == "/status":
         qsize = file_queue.qsize()
@@ -456,6 +467,14 @@ def handle_text(update):
 
 def poll():
     log.info("Bot started!")
+    # Send startup notification to confirm bot is running
+    try:
+        # Get bot info first
+        r = requests.get(f"{TG_API}/getMe")
+        bot_name = r.json().get("result",{}).get("first_name","Bot")
+        log.info(f"Bot name: {bot_name}")
+    except Exception as e:
+        log.warning(f"Could not get bot info: {e}")
     offset = 0
     while True:
         try:
